@@ -1,7 +1,14 @@
-FROM maven:3.6.3-jdk-13
+FROM selenium/standalone-chrome
 MAINTAINER Aditya Inapurapu adityaii@gmail.com
-RUN mkdir -p /usr/src/app
-EXPOSE 8080
+RUN sudo mkdir -p /usr/src/app
+RUN sudo apt-get update -y && sudo apt-get install -y maven
+
+RUN sudo wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz -O /tmp/openjdk-13.0.2_linux-x64_bin.tar.gz
+
+RUN sudo tar xfz /tmp/openjdk-13.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
+RUN sudo rm -rf /usr/bin/java && sudo ln -s /usr/lib/jvm/jdk-13.0.2/bin/java /usr/bin/java
+RUN sudo rm -f /tmp/openjdk-13.0.2_linux-x64_bin.tar.gz
 WORKDIR /usr/src/app
 ADD . /usr/src/app
-RUN mvn clean test
+RUN java -version
+RUN sudo mvn clean test
